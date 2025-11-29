@@ -1,0 +1,324 @@
+/* Catalog-style CSS inspired by provided catalog image */
+
+/* Fonts: use existing system font; optionally import Montserrat for catalog headings */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap');
+
+/* Global catalog theme overrides for common UI components
+   When `body.catalog-theme` is present these rules adapt headers, tabs,
+   buttons, cards, tables and form controls to the catalog look.
+*/
+body.catalog-theme {
+  background: var(--bg-lighter);
+  color: var(--text-dark);
+}
+
+body.catalog-theme .header {
+  background: var(--catalog-hero-bg);
+  color: var(--catalog-accent);
+}
+
+/* Tabs / navigation */
+body.catalog-theme .tabs {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0 18px;
+}
+
+body.catalog-theme .tabs .tab {
+  background: transparent;
+  color: var(--text-dark);
+  border: 2px solid transparent;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+body.catalog-theme .tabs .tab.active {
+  background: var(--catalog-hero-bg);
+  color: var(--catalog-accent);
+  border-color: rgba(255,210,77,0.06);
+}
+
+/* Buttons */
+body.catalog-theme .btn {
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-weight: 700;
+}
+
+body.catalog-theme .btn.btn-primary {
+  background: var(--catalog-hero-bg);
+  color: var(--catalog-accent);
+  border: 2px solid var(--catalog-hero-bg);
+}
+
+body.catalog-theme .btn.btn-success {
+  background: var(--catalog-hero-bg);
+  color: var(--catalog-accent);
+  border: 2px solid var(--catalog-hero-bg);
+}
+
+/* Cards and surfaces */
+body.catalog-theme .card,
+body.catalog-theme .catalog-card {
+  background: var(--catalog-surface);
+  border-radius: 6px;
+  border: 4px solid var(--bg-white);
+}
+
+/* Tables */
+body.catalog-theme table thead th {
+  background: var(--catalog-hero-bg);
+  color: var(--catalog-accent);
+  font-weight: 700;
+}
+
+body.catalog-theme table tbody td {
+  color: var(--text-dark);
+}
+
+/* Forms */
+body.catalog-theme input[type="text"],
+body.catalog-theme input[type="tel"],
+body.catalog-theme input[type="number"],
+body.catalog-theme input[type="date"],
+body.catalog-theme select,
+body.catalog-theme textarea {
+  border: 1px solid var(--border-color);
+  background: white;
+  color: var(--text-dark);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+body.catalog-theme input:focus,
+body.catalog-theme select:focus,
+body.catalog-theme textarea:focus {
+  outline: 3px solid rgba(255,210,77,0.12);
+}
+
+.catalog-hero {
+  background: var(--catalog-hero-bg); /* deep black bar */
+  color: var(--catalog-accent); /* warm yellow */
+  padding: 28px 20px;
+  text-align: center;
+  position: relative;
+  margin-bottom: 24px;
+}
+.catalog-hero .catalog-title {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  font-size: 36px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin: 0;
+}
+.catalog-hero .catalog-subtitle {
+  color: rgba(255,210,77,0.9);
+  font-size: 13px;
+  margin-top: 6px;
+  opacity: 0.95;
+}
+
+.catalog-container {
+  padding: 24px 20px 40px;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.catalog-card {
+  background: var(--catalog-surface);
+  border: 4px solid var(--bg-white);
+  border-radius: 6px;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.catalog-card .image-wrap {
+  background: white;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+}
+
+.catalog-card img {
+  max-width: 100%;
+  max-height: 120px;
+  object-fit: contain;
+}
+
+.catalog-card .card-title-band {
+  background: var(--catalog-accent); /* yellow band */
+  color: var(--catalog-hero-bg);
+  padding: 14px 8px;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+}
+
+.catalog-card .card-desc {
+  padding: 12px 10px;
+  font-size: 13px;
+  color: #333;
+}
+
+.price-badge {
+  display: inline-block;
+  background: var(--catalog-hero-bg); /* black */
+  color: var(--catalog-accent); /* yellow */
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  margin: 10px 0 18px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+}
+
+.catalog-note {
+  font-size: 12px;
+  color: #666;
+  padding: 10px 12px 18px;
+}
+
+/* Responsive smaller screens: make cards slightly taller and images smaller */
+@media (max-width: 768px) {
+  .catalog-hero .catalog-title { font-size: 28px; }
+  .catalog-card .image-wrap { min-height: 120px; }
+  .catalog-card img { max-height: 90px; }
+}
+
+@media (max-width: 480px) {
+  .catalog-hero { padding: 20px 12px; }
+  .catalog-hero .catalog-title { font-size: 22px; }
+  .catalog-grid { gap: 12px; }
+}
+
+/* Small utility to align catalog section with container */
+.catalog-wrapper {
+  background: var(--catalog-wrapper-bg);
+  padding: 20px 0 30px;
+}
+
+/* Section illustration utility (used for GIFs/PNGs placed near forms or headings) */
+.section-illustration {
+  max-width: 220px;
+  display: block;
+  margin: 8px 0 16px;
+  border-radius: 6px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer; /* indicates clickable for lightbox */
+}
+
+/* Caption below an image */
+.image-caption {
+  font-size: 12px;
+  color: #444;
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* Simple lightbox/modal styles */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11,11,11,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  padding: 24px;
+}
+.lightbox-overlay.open {
+  display: flex;
+}
+.lightbox-content {
+  max-width: 1100px;
+  width: 100%;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+.lightbox-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+.lightbox-caption {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+.lightbox-close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* Small button utility */
+.btn-sm {
+  padding: 6px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-dark);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+.status-paid { background: #1b9b4a; color: white; }
+.status-partial { background: #ffb86b; color: #1b1b1b; }
+.status-unpaid { background: #e65757; color: white; }
+
+/* Modal dialog (accessible) */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
+}
+.modal-backdrop.open {
+  display: flex;
+}
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 520px;
+  padding: 18px;
+  box-shadow: var(--shadow-lg);
+}
+.modal h3 { margin: 0 0 8px; font-size: 18px; }
+.modal .modal-body { margin: 8px 0 12px; }
+.modal .modal-actions { display:flex; gap:8px; justify-content:flex-end; }
+.modal .input-row { margin-bottom:10px; }
+.modal .input-row label { display:block; font-size:13px; margin-bottom:6px; }
+.modal .input-row input[type="number"], .modal .input-row input[type="text"] { width:100%; padding:8px; border-radius:6px; border:1px solid var(--border-color); }
+.modal .error { color: #c0392b; font-size:13px; margin-top:6px; }

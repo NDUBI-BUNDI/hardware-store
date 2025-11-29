@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: hardware_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: hardware_store
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./backend/database.sql:/docker-entrypoint-initdb.d/database.sql
+      - mysql_data:/var/lib/mysql
+    networks:
+      - hardware_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  php:
+    build: .
+    container_name: hardware_backend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./backend:/var/www/html/backend
+      - ./frontend:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - hardware_network
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: hardware_store
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root123
+
+volumes:
+  mysql_data:
+
+networks:
+  hardware_network:
+    driver: bridge

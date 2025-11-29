@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hardware Store Management System - DASHEL Enterprise">
+    <title>Hardware Store Admin - DASHEL</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body class="catalog-theme">
+    <div class="container">
+        <!-- Header -->
+        <div class="header scroll-animate fade-up">
+            <div class="header-content">
+                <h1>🔧 Hardware Store Admin</h1>
+                <p>Manage your inventory, sales, suppliers & M-Pesa payments</p>
+                <p class="subtitle">DASHEL Enterprise</p>
+            </div>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <div class="tabs scroll-animate fade-up" style="animation-delay: 0.1s;">
+            <button class="tab active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="tab" onclick="showTab('sales')">💳 Sales</button>
+            <button class="tab" onclick="showTab('inventory')">📦 Inventory</button>
+            <button class="tab" onclick="showTab('suppliers')">🏭 Suppliers</button>
+            <button class="tab" onclick="showTab('mpesa')">💰 M-Pesa STK Push</button>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content scroll-animate fade-up" style="animation-delay: 0.2s;">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-cards" data-stagger data-stagger-delay="0.1" data-stagger-animation="fade-up">
+                    <div class="card scroll-animate fade-up delay-1">
+                        <h3>Total Sales</h3>
+                        <div class="value" id="total-sales">KSh 0.00</div>
+                        <p>All time sales revenue</p>
+                    </div>
+                    
+                    <div class="card success scroll-animate fade-up delay-2">
+                        <h3>Profit</h3>
+                        <div class="value" id="total-profit">KSh 0.00</div>
+                        <p>Total profit earned</p>
+                    </div>
+                    
+                    <div class="card info scroll-animate fade-up delay-3">
+                        <h3>Inventory Value</h3>
+                        <div class="value" id="inventory-value">KSh 0.00</div>
+                        <p>Current stock value</p>
+                    </div>
+                    
+                    <div class="card warning scroll-animate fade-up delay-4">
+                        <h3>Low Stock Items</h3>
+                        <div class="value" id="low-stock">0</div>
+                        <p>Items below reorder level</p>
+                    </div>
+                    
+                    <div class="card scroll-animate fade-up delay-5">
+                        <h3>Total Products</h3>
+                        <div class="value" id="total-products">0</div>
+                        <p>In inventory</p>
+                    </div>
+                    
+                    <div class="card scroll-animate fade-up delay-5">
+                        <h3>Suppliers</h3>
+                        <div class="value" id="total-suppliers">0</div>
+                        <p>Active suppliers</p>
+                    </div>
+                </div>
+                <!-- Dashboard view mode toggle + granularity selector -->
+                <div class="dashboard-mode-toggle" style="margin-top:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                    <label style="font-weight:600;margin-right:8px">View:</label>
+                    <button class="btn btn-outline" id="mode-fig" data-mode="fig" aria-pressed="true" aria-controls="dashboard-chart-container">Figure Mode</button>
+                    <button class="btn btn-outline" id="mode-graph" data-mode="graph" aria-pressed="false" aria-controls="dashboard-chart-container">Graph Mode</button>
+
+                    <label style="font-weight:600;margin-left:12px;margin-right:8px">Granularity:</label>
+                    <select id="analytics-granularity" aria-label="Analytics granularity">
+                        <option value="daily">Daily</option>
+                        <option value="monthly" selected>Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+
+                <!-- Chart container (hidden in figure mode) -->
+                <div id="dashboard-chart-container" style="margin-top:18px;display:none;">
+                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+                        <div id="analytics-presets" role="group" aria-label="Quick ranges" style="display:flex;gap:6px;align-items:center;">
+                                <button class="btn btn-sm btn-outline" data-preset="7" role="button" tabindex="0" aria-label="Last 7 days">Last 7 days</button>
+                                <button class="btn btn-sm btn-outline" data-preset="30" role="button" tabindex="0" aria-label="Last 30 days">Last 30 days</button>
+                                <button class="btn btn-sm btn-outline" data-preset="365" role="button" tabindex="0" aria-label="Last 12 months">Last 12 months</button>
+                            </div>
+                        <div style="display:flex;gap:6px;align-items:center;margin-left:8px">
+                            <label for="analytics-from" style="font-size:13px;color:var(--muted-color)">From</label>
+                            <input id="analytics-from" type="date" style="padding:6px;border-radius:4px;border:1px solid var(--border-color)" />
+                            <label for="analytics-to" style="font-size:13px;color:var(--muted-color)">To</label>
+                            <input id="analytics-to" type="date" style="padding:6px;border-radius:4px;border:1px solid var(--border-color)" />
+                            <button class="btn btn-sm btn-primary" id="analytics-apply">Apply Range</button>
+                            <button class="btn btn-sm btn-outline" id="analytics-refresh" aria-label="Refresh analytics">Refresh</button>
+                            <button class="btn btn-sm btn-outline" id="analytics-export" aria-label="Export analytics CSV">Export CSV</button>
+                        </div>
+                    </div>
+                    <canvas id="sales-chart" height="240"></canvas>
+                </div>
+                
+                <h2 class="scroll-animate fade-up">Recent Sales</h2>
+                <div class="table-container scroll-animate slide-left">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-sales-table">
+                            <tr><td colspan="5" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                                <!-- Catalog Preview (styled like provided catalog image) -->
+                                <div class="catalog-wrapper scroll-animate fade-up" style="margin-top:30px;">
+                                    <div class="catalog-hero">
+                                        <h2 class="catalog-title">HARDWARE PRODUCTS</h2>
+                                        <div class="catalog-subtitle">CATALOG</div>
+                                        <div style="margin-top:12px;">
+                                            <input id="catalog-search" type="search" placeholder="Search products..." aria-label="Search catalog" style="max-width:360px;padding:10px;border-radius:6px;border:1px solid var(--border-color);">
+                                        </div>
+                                    </div>
+                                    <div class="catalog-container">
+                                        <div class="catalog-grid">
+                                            <!-- Card 1 -->
+                                            <div class="catalog-card scroll-animate fade-up delay-1">
+                                <div class="image-wrap">
+                                    <img data-src="assets/images/product-hammer.svg" alt="Hammer Drill" class="product-image lazy-img" data-lightbox="true" data-caption="Hammer Drill — KSh 899.99">
+                                </div>
+                                <div class="card-title-band">Hammer Drill</div>
+                                                <div class="card-desc">Powerful hammer drill for drilling through concrete, brick, and stone.</div>
+                                                <div class="price-badge">KSh 899.99</div>
+                                            </div>
+
+                                            <!-- Card 2 -->
+                                            <div class="catalog-card scroll-animate fade-up delay-2">
+                                                <div class="image-wrap">
+                                                      <img data-src="assets/images/product-drill.svg" alt="Circular Saw" class="product-image lazy-img" data-lightbox="true" data-caption="Circular Saw — KSh 899.99">
+                                                </div>
+                                                <div class="card-title-band">Circular Saw</div>
+                                                <div class="card-desc">High-performance circular saw with adjustable cutting angles.</div>
+                                                <div class="price-badge">KSh 899.99</div>
+                                            </div>
+
+                                            <!-- Card 3 -->
+                                            <div class="catalog-card scroll-animate fade-up delay-3">
+                                                <div class="image-wrap">
+                                                      <img data-src="assets/images/product-saw.svg" alt="Angle Grinder" class="product-image lazy-img" data-lightbox="true" data-caption="Angle Grinder — KSh 899.99">
+                                                </div>
+                                                <div class="card-title-band">Angle Grinder</div>
+                                                <div class="card-desc">Durable angle grinder for heavy-duty grinding and cutting tasks.</div>
+                                                <div class="price-badge">KSh 899.99</div>
+                                            </div>
+
+                                            <!-- Card 4 -->
+                                            <div class="catalog-card scroll-animate fade-up delay-4">
+                                                <div class="image-wrap">
+                                                      <img data-src="assets/images/product-wrench.svg" alt="Tool Storage Box" class="product-image lazy-img" data-lightbox="true" data-caption="Tool Storage Box — KSh 899.99">
+                                                </div>
+                                                <div class="card-title-band">Tool Storage Box</div>
+                                                <div class="card-desc">Heavy-duty tool storage box with compartments for organized storage.</div>
+                                                <div class="price-badge">KSh 899.99</div>
+                                            </div>
+
+                                            <!-- Card 5 -->
+                                            <div class="catalog-card scroll-animate fade-up delay-5">
+                                                <div class="image-wrap">
+                                                      <img data-src="assets/images/product-drill.svg" alt="Cordless Drill" class="product-image lazy-img" data-lightbox="true" data-caption="Cordless Drill — KSh 899.99">
+                                                </div>
+                                                <div class="card-title-band">Cordless Drill</div>
+                                                <div class="card-desc">Orbital sander for smooth and efficient sanding on various surfaces.</div>
+                                                <div class="price-badge">KSh 899.99</div>
+                                            </div>
+
+                                            <!-- Card 6 -->
+                                            <div class="catalog-card scroll-animate fade-up delay-5">
+                                                <div class="image-wrap">
+                                                      <img data-src="assets/images/product-hammer.svg" alt="Hammer Drill" class="product-image lazy-img" data-lightbox="true" data-caption="Hammer Drill — KSh 899.99">
+                                                </div>
+                                                <div class="card-title-band">Hammer Drill</div>
+                                                <div class="card-desc">Powerful hammer drill for drilling through concrete, brick, and stone.</div>
+                                                <div class="price-badge">KSh 899.99</div>
+                                            </div>
+
+                                            <!-- Card 7 -->
+                                            <div class="catalog-card scroll-animate fade-up delay-1">
+                                                <div class="image-wrap">
+                                                      <img data-src="assets/images/product-saw.svg" alt="Garden Trowel" class="product-image lazy-img" data-lightbox="true" data-caption="Garden Trowel — KSh 899.99">
+                                                </div>
+                                                <div class="card-title-band">Garden Trowel</div>
+                                                <div class="card-desc">Heavy-duty hand trowel for gardening and small digging tasks.</div>
+                                                <div class="price-badge">KSh 899.99</div>
+                                            </div>
+
+                                            <!-- Card 8 -->
+                                            <div class="catalog-card scroll-animate fade-up delay-2">
+                                                <div class="image-wrap">
+                                                      <img data-src="assets/images/product-paint.svg" alt="Electric Sander" class="product-image lazy-img" data-lightbox="true" data-caption="Electric Sander — KSh 899.99">
+                                                </div>
+                                                <div class="card-title-band">Electric Sander</div>
+                                                <div class="card-desc">Orbital sander for smooth finishing and efficient sanding.</div>
+                                                <div class="price-badge">KSh 899.99</div>
+                                            </div>
+
+                                            <!-- Card 9 -->
+                                            <div class="catalog-card scroll-animate fade-up delay-3">
+                                                <div class="image-wrap">
+                                                      <img data-src="assets/images/product-wrench.svg" alt="Multi-Tool Kit" class="product-image lazy-img" data-lightbox="true" data-caption="Multi-Tool Kit — KSh 899.99">
+                                                </div>
+                                                <div class="card-title-band">Multi-Tool Kit</div>
+                                                <div class="card-desc">Multi-purpose kit for a wide range of repairs and DIY tasks.</div>
+                                                <div class="price-badge">KSh 899.99</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+            </div>
+            
+            <!-- Sales Tab -->
+            <div id="sales" class="tab-content">
+                <h2>Record New Sale</h2>
+                <img data-src="assets/images/sales-enablement.gif" alt="Sales workflow animation showing the sales flow" class="section-illustration lazy-img" data-lightbox="true" data-caption="Sales workflow — new order flow"/>
+                <form id="sales-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <select id="sale-product" required>
+                                <option value="">Select Product</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" id="sale-quantity" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Unit Price (KSh)</label>
+                            <input type="number" id="sale-price" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Sale Date</label>
+                            <input type="date" id="sale-date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="sale-notes" rows="2" placeholder="Optional notes..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Record Sale</button>
+                </form>
+                
+                <h2 style="margin-top: 40px;">All Sales</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-sales-table">
+                            <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Inventory Tab -->
+            <div id="inventory" class="tab-content">
+                <h2>Add New Product</h2>
+                <img data-src="assets/images/inventory.gif" alt="Inventory animation displaying stock operations" class="section-illustration lazy-img" data-lightbox="true" data-caption="Inventory management — track stock and reorder levels"/>
+                <form id="inventory-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" id="inv-product" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" id="inv-quantity" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Buying Price (KSh)</label>
+                            <input type="number" id="inv-buying" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Selling Price (KSh)</label>
+                            <input type="number" id="inv-selling" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Reorder Level</label>
+                            <input type="number" id="inv-reorder" min="0" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label>Supplier</label>
+                            <select id="inv-supplier">
+                                <option value="">Select Supplier</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="inv-description" rows="2" placeholder="Product description..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </form>
+                
+                <h2 style="margin-top: 40px;">Current Inventory</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Buying Price</th>
+                                <th>Selling Price</th>
+                                <th>Profit Margin</th>
+                                <th>Supplier</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table">
+                            <tr><td colspan="7" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Suppliers Tab -->
+            <div id="suppliers" class="tab-content">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <h2 style="margin:0">Add New Supplier</h2>
+                    <button id="open-payouts" class="btn btn-sm btn-outline" style="margin-left:8px">Manage Payouts</button>
+                </div>
+                <img data-src="assets/images/selection.png" alt="Supplier selection interface" class="section-illustration lazy-img" data-lightbox="true" data-caption="Supplier selection and contact info"/>
+                <form id="supplier-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Supplier Name</label>
+                            <input type="text" id="sup-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="sup-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="sup-email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" id="sup-address">
+                    </div>
+                    <div class="form-group">
+                        <label>Products Supplied</label>
+                        <textarea id="sup-products" rows="2" placeholder="E.g., Cement, Steel bars, Paint"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Terms</label>
+                        <input type="text" id="sup-terms" placeholder="E.g., Net 30, Net 60">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Supplier</button>
+                </form>
+                
+                <h2 style="margin-top: 40px;">Suppliers List</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Payment Terms</th>
+                                <th>Products</th>
+                                <th>Payment Status</th>
+                                <th>Amount Owed</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suppliers-table">
+                            <tr><td colspan="9" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- M-Pesa STK Push Tab -->
+            <div id="mpesa" class="tab-content">
+                <div class="stk-section">
+                    <h2>Send M-Pesa STK Push</h2>
+                    <img data-src="assets/images/MPESA.png" alt="M-Pesa logo" class="section-illustration lazy-img" data-lightbox="true" data-caption="M-Pesa payments integration"/>
+                    <p>Request payment from customers via M-Pesa</p>
+                    
+                    <form id="stk-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" id="stk-phone" placeholder="254712345678" pattern="254[0-9]{9}" required>
+                                <small>Format: 254712345678</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Amount (KSh)</label>
+                                <input type="number" id="stk-amount" min="1" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Send Payment Request</button>
+                    </form>
+                </div>
+                
+                <h2 style="margin-top: 40px;">Recent STK Push Requests</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Phone</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stk-table">
+                            <tr><td colspan="5" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Alert Container -->
+    <div id="alert-container" aria-live="polite" aria-atomic="true"></div>
+    
+    <script src="assets/js/scroll-animations.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

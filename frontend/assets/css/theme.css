@@ -1,0 +1,335 @@
+/* ============================================
+   THEME & BRANDING
+   Hardware Store Admin - DASHEL Enterprise
+   ============================================ */
+
+:root {
+    /* Primary Colors */
+    --primary-color: #667eea;
+    --primary-dark: #764ba2;
+    --primary-light: #7c8ef2;
+    
+    /* Secondary Colors */
+    --success-color: #11998e;
+    --success-light: #38ef7d;
+    --warning-color: #f093fb;
+    --warning-dark: #f5576c;
+    --info-color: #4facfe;
+    --info-light: #00f2fe;
+    --danger-color: #dc3545;
+    --danger-light: #f8d7da;
+    
+    /* Neutral Colors */
+    --text-dark: #333333;
+    --text-light: #666666;
+    --text-muted: #999999;
+    --border-color: #dee2e6;
+    --bg-light: #f8f9fa;
+    --bg-lighter: #f0f1f3;
+    --bg-white: #ffffff;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.3);
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 48px;
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 20px;
+    --radius-full: 9999px;
+    
+    /* Font Sizes */
+    --font-xs: 12px;
+    --font-sm: 14px;
+    --font-base: 16px;
+    --font-lg: 18px;
+    --font-xl: 20px;
+    --font-2xl: 24px;
+    --font-3xl: 32px;
+    --font-4xl: 40px;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Zindex */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal: 1040;
+    --z-popover: 1050;
+    --z-tooltip: 1060;
+}
+
+/* Dark Theme Variables */
+body.dark-theme {
+    --text-dark: #f0f0f0;
+    --text-light: #d0d0d0;
+    --text-muted: #b0b0b0;
+    --bg-light: #2a2a2a;
+    --bg-lighter: #1f1f1f;
+    --bg-white: #1a1a1a;
+    --border-color: #444444;
+}
+
+/* Catalog (poster) theme variables and quick mapping
+   Use `body.catalog-theme` on pages to apply the catalog aesthetic globally.
+*/
+:root {
+    /* Catalog palette - warm yellow on deep black with light surfaces */
+    --catalog-hero-bg: #1b1b1b; /* deep black used in hero and badges */
+    --catalog-accent: #ffd24d; /* warm catalog yellow */
+    --catalog-surface: #f7f7f7; /* card surface */
+    --catalog-wrapper-bg: #e9e9e9; /* page section background */
+}
+
+body.catalog-theme {
+    /* Map some commonly used tokens to the catalog palette so global components adapt */
+    --primary-color: var(--catalog-accent);
+    --primary-dark: #d3a93d;
+    --bg-light: var(--catalog-surface);
+    --bg-lighter: var(--catalog-wrapper-bg);
+    --bg-white: #ffffff;
+    --text-dark: #1b1b1b;
+    --text-light: #333333;
+    --border-color: #ffffff;
+    --shadow-sm: 0 6px 12px rgba(0,0,0,0.06);
+}
+
+/* ============ BRAND COLORS ============ */
+
+.color-primary {
+    color: var(--primary-color);
+}
+
+.color-success {
+    color: var(--success-color);
+}
+
+.color-warning {
+    color: var(--warning-color);
+}
+
+.color-info {
+    color: var(--info-color);
+}
+
+.color-danger {
+    color: var(--danger-color);
+}
+
+/* ============ BACKGROUND COLORS ============ */
+
+.bg-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.bg-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.bg-warning {
+    background: var(--warning-color);
+    color: white;
+}
+
+.bg-info {
+    background: var(--info-color);
+    color: white;
+}
+
+.bg-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.bg-light {
+    background: var(--bg-light);
+    color: var(--text-dark);
+}
+
+/* ============ GRADIENT BACKGROUNDS ============ */
+
+.bg-gradient-primary {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.bg-gradient-success {
+    background: var(--gradient-success);
+    color: white;
+}
+
+.bg-gradient-warning {
+    background: var(--gradient-warning);
+    color: white;
+}
+
+.bg-gradient-info {
+    background: var(--gradient-info);
+    color: white;
+}
+
+/* ============ TEXT UTILITIES ============ */
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-success {
+    color: var(--success-color) !important;
+}
+
+.text-warning {
+    color: var(--warning-color) !important;
+}
+
+.text-info {
+    color: var(--info-color) !important;
+}
+
+.text-danger {
+    color: var(--danger-color) !important;
+}
+
+.text-light {
+    color: var(--text-light) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* ============ SHADOW UTILITIES ============ */
+
+.shadow-sm {
+    box-shadow: var(--shadow-sm);
+}
+
+.shadow-md {
+    box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+    box-shadow: var(--shadow-lg);
+}
+
+.shadow-xl {
+    box-shadow: var(--shadow-xl);
+}
+
+/* ============ BORDER UTILITIES ============ */
+
+.border-primary {
+    border-color: var(--primary-color) !important;
+}
+
+.border-success {
+    border-color: var(--success-color) !important;
+}
+
+.border-warning {
+    border-color: var(--warning-color) !important;
+}
+
+.border-danger {
+    border-color: var(--danger-color) !important;
+}
+
+.border-light {
+    border-color: var(--border-color) !important;
+}
+
+/* ============ RADIUS UTILITIES ============ */
+
+.rounded-sm {
+    border-radius: var(--radius-sm);
+}
+
+.rounded-md {
+    border-radius: var(--radius-md);
+}
+
+.rounded-lg {
+    border-radius: var(--radius-lg);
+}
+
+.rounded-xl {
+    border-radius: var(--radius-xl);
+}
+
+.rounded-full {
+    border-radius: var(--radius-full);
+}
+
+/* ============ SPACING UTILITIES ============ */
+
+.p-xs { padding: var(--spacing-xs); }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
+
+.m-xs { margin: var(--spacing-xs); }
+.m-sm { margin: var(--spacing-sm); }
+.m-md { margin: var(--spacing-md); }
+.m-lg { margin: var(--spacing-lg); }
+.m-xl { margin: var(--spacing-xl); }
+
+.mt-xs { margin-top: var(--spacing-xs); }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
+
+.mb-xs { margin-bottom: var(--spacing-xs); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+/* ============ RESPONSIVE THEME ============ */
+
+@media (max-width: 768px) {
+    :root {
+        --font-base: 14px;
+        --font-lg: 16px;
+        --font-xl: 18px;
+        --font-2xl: 20px;
+        --spacing-lg: 12px;
+        --spacing-xl: 16px;
+    }
+}
+
+/* ============ PRINT THEME ============ */
+
+@media print {
+    :root {
+        --shadow-sm: none;
+        --shadow-md: none;
+        --shadow-lg: none;
+        --shadow-xl: none;
+    }
+}
