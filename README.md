@@ -298,19 +298,21 @@ docker-compose up -d --build
 
 ## 📄 License
 
-This project is proprietary to DASHEL Enterprise.
+This project is proprietary to BOAZ NDUBI BINDI.
 
 ---
 
 ## 👥 Team
 
-**DASHEL Enterprise**
+**BOAZ NDUBI**
 
 ---
 
 ## 📞 Contact
 
-For support or inquiries, contact DASHEL Enterprise support team.
+For support or inquiries, contact BOAZ NDUBI 
+boazbundi1@gmail.com
++254112815454
 
 ---
 
